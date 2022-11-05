@@ -12,4 +12,18 @@ describe("effect", () => {
     user.age++;
     expect(nextAge).toBe(22);
   });
+  it("runner", () => {
+    const obj = { foo: 1 };
+    const runner = effect(() => {
+      obj.foo++;
+      return "haha";
+    });
+    expect(obj.foo).toBe(2);
+    // effect函数执行后 返回个函数，
+    // 该函数执行后 会再次触发fn
+    // 返回的结果就是fn的结果
+    const r = runner();
+    expect(obj.foo).toBe(3);
+    expect(r).toBe("haha");
+  });
 });
