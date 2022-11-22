@@ -212,4 +212,4 @@ it("when call set should warn", () => {
 });
 ```
 
-实现警告提示
+实现警告提示(在 set 的时候 console.warn 即可)

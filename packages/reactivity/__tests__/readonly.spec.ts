@@ -1,4 +1,4 @@
-import { readonly } from "../src/reactive";
+import { isReadonly, readonly } from "../src/reactive";
 
 describe("readonly", () => {
   it("readonly", () => {
@@ -10,6 +10,8 @@ describe("readonly", () => {
     expect("foo" in wrapped).toBe(true);
     // ownKeys
     expect(Object.keys(wrapped)).toEqual(["foo", "bar"]);
+    expect(isReadonly(wrapped)).toBe(true);
+    expect(isReadonly(original)).toBe(false);
   });
   it("when call set should warn", () => {
     // 模拟打印警告信息
