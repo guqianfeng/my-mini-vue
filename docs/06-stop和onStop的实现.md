@@ -154,3 +154,33 @@ export const extend = Object.assign;
 // effect_.onStop = onStop;
 extend(effect_, options);
 ```
+
+还有个优化点，用户多次 stop，其实只要 stop 一次就可以了，此时我们可以用个 active 作为标记
+
+```ts
+class ReactiveEffect {
+  private _fn: any;
+  deps = [];
+  // 标记，active默认是true
+  active = true;
+  onStop?: () => void;
+  constructor(fn, public scheduler?) {
+    this._fn = fn;
+  }
+  run() {
+    activeEffect = this;
+    return this._fn();
+  }
+  stop() {
+    if (this.active) {
+      // 当active是true的时候再处理stop逻辑
+      cleanupEffect(this);
+      if (this.onStop) {
+        this.onStop();
+      }
+      // 处理完改为false
+      this.active = false;
+    }
+  }
+}
+```
