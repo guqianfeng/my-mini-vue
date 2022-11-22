@@ -2,7 +2,7 @@
 
 每个 effect 函数返回 runner，runner 可以再次执行，执行意味着 fn 再次执行，并且 fn 的返回值即 runner 的返回值
 
-## 编写单元测试
+## 编写测试用例
 
 ```ts
 it("runner", () => {

@@ -2,7 +2,7 @@
 
 这次的 scheduler 感觉非常的陌生，我们可以先拷贝源码中的 effect 里的 scheduler 单元测试来了解他是干嘛用的
 
-## 单元测试
+## 编写测试用例
 
 ```ts
 it("scheduler", () => {
