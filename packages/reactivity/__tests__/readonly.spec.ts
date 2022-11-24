@@ -12,6 +12,8 @@ describe("readonly", () => {
     expect(Object.keys(wrapped)).toEqual(["foo", "bar"]);
     expect(isReadonly(wrapped)).toBe(true);
     expect(isReadonly(original)).toBe(false);
+    expect(isReadonly(wrapped.bar)).toBe(true);
+    expect(isReadonly(original.bar)).toBe(false);
   });
   it("when call set should warn", () => {
     // 模拟打印警告信息

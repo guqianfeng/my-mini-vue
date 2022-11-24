@@ -1,5 +1,6 @@
+import { isObject } from "../../shared";
 import { track, trigger } from "./effect";
-import { ReactiveFlag } from "./reactive";
+import { reactive, ReactiveFlag, readonly } from "./reactive";
 
 export const createGetter = (isReadonly = false) => {
   return function get(target, key) {
@@ -8,7 +9,13 @@ export const createGetter = (isReadonly = false) => {
     } else if (key === ReactiveFlag.IS_READONLY) {
       return isReadonly;
     }
+    // res可能是基本数据类型，也有可能是个对象
     const res = Reflect.get(target, key);
+
+    if (isObject(res)) {
+      return isReadonly ? readonly(res) : reactive(res);
+    }
+
     if (!isReadonly) {
       // 依赖收集
       track(target, key);
