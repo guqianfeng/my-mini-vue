@@ -2,6 +2,7 @@ import { extend } from "../../shared";
 
 const targetMap = new Map();
 let activeEffect;
+let shouldTrack;
 class ReactiveEffect {
   private _fn: any;
   deps = [];
@@ -11,8 +12,15 @@ class ReactiveEffect {
     this._fn = fn;
   }
   run() {
+    if (!this.active) {
+      // stop后再次执行runner
+      return this._fn();
+    }
     activeEffect = this;
-    return this._fn();
+    shouldTrack = true;
+    const result = this._fn();
+    shouldTrack = false;
+    return result;
   }
   stop() {
     if (this.active) {
@@ -29,6 +37,7 @@ function cleanupEffect(effect) {
   effect.deps.forEach((dep: any) => {
     dep.delete(effect);
   });
+  effect.deps.length = 0;
 }
 export const effect = (fn, options: any = {}) => {
   const scheduler = options.scheduler;
@@ -40,7 +49,10 @@ export const effect = (fn, options: any = {}) => {
   return runner;
 };
 
+export const isTracking = () => activeEffect !== undefined && shouldTrack;
+
 export const track = (target, key) => {
+  if (!isTracking()) return;
   // targetMap => target => depsMap
   // depsMap => key => dep
   let depsMap = targetMap.get(target);
@@ -48,12 +60,12 @@ export const track = (target, key) => {
     depsMap = new Map();
     targetMap.set(target, depsMap);
   }
-  let dep = depsMap.get(key);
+  let dep: Set<any> = depsMap.get(key);
   if (!dep) {
     dep = new Set();
     depsMap.set(key, dep);
   }
-  if (!activeEffect) return;
+  if (dep.has(activeEffect)) return;
   dep.add(activeEffect);
   activeEffect.deps.push(dep);
 };

@@ -77,6 +77,8 @@ function cleanupEffect(effect) {
   effect.deps.forEach((dep: Set<any>) => {
     dep.delete(effect);
   });
+  // 优化数组就可以清空了
+  effect.deps.length = 0;
 }
 ```
 
