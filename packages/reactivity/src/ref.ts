@@ -1,0 +1,37 @@
+import { reactive } from "./reactive";
+import { isObject } from "./../../shared/index";
+import { hasChanged } from "../../shared";
+import { isTracking, trackEffects, triggerEffects } from "./effect";
+
+class RefImpl {
+  private _value;
+  private _rawValue;
+  public dep;
+  constructor(value) {
+    this._rawValue = value;
+    this._value = convert(value);
+    this.dep = new Set();
+  }
+  get value() {
+    trackRefValue(this);
+    return this._value;
+  }
+  set value(newValue) {
+    if (hasChanged(newValue, this._rawValue)) {
+      this._rawValue = newValue;
+      this._value = convert(newValue);
+      triggerEffects(this.dep);
+    }
+  }
+}
+export const convert = (value) => {
+  return isObject(value) ? reactive(value) : value;
+};
+function trackRefValue(ref) {
+  if (isTracking()) {
+    trackEffects(ref.dep);
+  }
+}
+export const ref = (value) => {
+  return new RefImpl(value);
+};

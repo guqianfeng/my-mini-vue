@@ -63,21 +63,27 @@ export const track = (target, key) => {
     dep = new Set();
     depsMap.set(key, dep);
   }
+  trackEffects(dep);
+};
+export function trackEffects(dep) {
   if (dep.has(activeEffect)) return;
   dep.add(activeEffect);
   activeEffect.deps.push(dep);
-};
+}
 export const trigger = (target, key) => {
   const depsMap = targetMap.get(target);
-  const deps = depsMap.get(key);
-  for (const effect of deps) {
+  const dep = depsMap.get(key);
+  triggerEffects(dep);
+};
+export function triggerEffects(dep) {
+  for (const effect of dep) {
     if (effect.scheduler) {
       effect.scheduler();
     } else {
       effect.run();
     }
   }
-};
+}
 
 export const stop = (runner) => {
   runner.effect.stop();
