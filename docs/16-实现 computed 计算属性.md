@@ -100,12 +100,10 @@ class ComputedRefImpl {
 
 ```ts
 class ComputedRefImpl {
-  private _getter;
   private _dirty: boolean = true;
   private _value: any;
   private _effect: ReactiveEffect;
   constructor(getter) {
-    this._getter = getter;
     this._effect = new ReactiveEffect(getter, () => {
       if (!this._dirty) {
         this._dirty = true;
