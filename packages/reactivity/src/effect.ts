@@ -3,8 +3,7 @@ import { extend } from "../../shared";
 const targetMap = new Map();
 let activeEffect;
 let shouldTrack;
-class ReactiveEffect {
-  private _fn: any;
+export class ReactiveEffect {
   deps = [];
   active = true;
   onStop?: () => void;
