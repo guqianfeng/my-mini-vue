@@ -4,7 +4,7 @@ readonly 实现上与 reactive 很接近，就是只读属性，所以不需要�
 
 ## 编写测试用例
 
-只读，顾名思义，就是只能读(get)，不能改(set)
+新建文件`readonly.spec.ts`, 只读，顾名思义，就是只能读(get)，不能改(set)
 
 ```ts
 describe("readonly", () => {
@@ -163,14 +163,14 @@ export const readonly = (raw) => {
 import { mutableHandlers, readonlyHandlers } from "./baseHandlers";
 
 export const reactive = (raw) => {
-  return createActiveObject(raw, mutableHandlers);
+  return createReactiveObject(raw, mutableHandlers);
 };
 
 export const readonly = (raw) => {
-  return createActiveObject(raw, readonlyHandlers);
+  return createReactiveObject(raw, readonlyHandlers);
 };
 
-function createActiveObject(raw, baseHandlers) {
+function createReactiveObject(raw, baseHandlers) {
   return new Proxy(raw, baseHandlers);
 }
 ```

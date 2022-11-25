@@ -8,17 +8,15 @@ class ReactiveEffect {
   deps = [];
   active = true;
   onStop?: () => void;
-  constructor(fn, public scheduler?) {
-    this._fn = fn;
-  }
+  constructor(public fn, public scheduler?) {}
   run() {
     if (!this.active) {
       // stop后再次执行runner
-      return this._fn();
+      return this.fn();
     }
     activeEffect = this;
     shouldTrack = true;
-    const result = this._fn();
+    const result = this.fn();
     shouldTrack = false;
     return result;
   }
