@@ -117,6 +117,7 @@ class RefImpl {
   }
   get value() {
     if (isTracking()) {
+      // 一定要在可收集依赖的条件下再去收集
       trackEffects(this.dep);
     }
     return this._value;
@@ -125,6 +126,7 @@ class RefImpl {
     // 此行if是在测试用例通过后，完成边缘case
     if (Object.is(newValue, this._value)) return;
     this._value = newValue;
+    // 在设置值以后再去触发effects
     triggerEffects(this.dep);
   }
 }
@@ -140,6 +142,7 @@ export const ref = (value) => {
 ```ts
 // shared/index.ts
 export const hasChanged = (value, oldValue) => {
+  // 别忘记这里是取反的判断2个值是否相当，我们的函数名为是否改变了
   return !Object.is(value, oldValue);
 };
 
