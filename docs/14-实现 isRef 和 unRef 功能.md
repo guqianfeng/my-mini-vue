@@ -33,5 +33,7 @@ export const isRef = (ref) => {
 unRef 的作用就是获取 ref 对象的 value 属性，如果不是 ref 对象则直接返回
 
 ```ts
-
+export const unRef = (ref) => {
+  return isRef(ref) ? ref.value : ref;
+};
 ```

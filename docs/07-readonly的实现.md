@@ -39,7 +39,7 @@ export const readonly = (raw) => {
 };
 ```
 
-## 重构代码 craeteGetter
+## 重构代码 createGetter
 
 有重复的代码，构建 createGetter 高阶函数，通过传入参数是否可读，来判断是否收集依赖
 
