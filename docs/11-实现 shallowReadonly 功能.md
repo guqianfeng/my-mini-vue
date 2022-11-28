@@ -2,12 +2,13 @@
 
 ## 测试用例
 
-新建文件`shallowReadonly.spec.ts`，简单来说就是第一层是 readonly，里面嵌套的结果不是 readyonly
+新建文件`shallowReadonly.spec.ts`，简单来说就是第一层是 readonly，里面嵌套的结果不是 readonly，可以参考源码测试用例
 
 ```ts
 describe("reactivity/shallowReadonly", () => {
   test("should not make non-reactive properties reactive", () => {
     const props = shallowReadonly({ n: { foo: 1 } });
+		expect(isReadonly(props)).toBe(true);
     expect(isReadonly(props.n)).toBe(false);
   });
 });
